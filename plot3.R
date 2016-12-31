@@ -17,14 +17,17 @@ input.data <- read.table(file='household_power_consumption.txt',
                                       'numeric'))
 
 data <- filter(input.data, Date == '1/2/2007' | Date == '2/2/2007') %>%
-  mutate(Date = as.Date(strptime(Date, '%d/%m/%Y')))
+  mutate(Datetime = paste(Date, Time, sep = ' ')) %>%
+  mutate(Datetime = as.POSIXct(strptime(Datetime, '%d/%m/%Y %H:%M:%S')))
 
 png('plot3.png', width=480, height=480)
-plot.ts(data$Sub_metering_1,
-        main='',
-        xlab='',
-        ylab='Energy sub metering')
-lines(data$Sub_metering_2, col=2)
-lines(data$Sub_metering_3, col=4)
+plot(Sub_metering_1 ~ Datetime,
+     data=data,
+     type='l',
+     main='',
+     xlab='',
+     ylab='Energy sub metering')
+lines(x=data$Datetime, y=data$Sub_metering_2, col=2)
+lines(x=data$Datetime, y=data$Sub_metering_3, col=4)
 legend('topright', legend=names(data)[7:9], col=c(1,2,4), lwd=1)
 dev.off()
