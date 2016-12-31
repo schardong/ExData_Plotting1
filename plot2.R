@@ -16,12 +16,13 @@ input.data <- read.table(file='household_power_consumption.txt',
                                       'numeric',
                                       'numeric'))
 
-data <- filter(input.data, Date == '1/2/2007' | Date == '2/2/2007')
+data <- filter(input.data, Date == '1/2/2007' | Date == '2/2/2007') %>%
+  mutate(Date = as.Date(strptime(Date, '%d/%m/%Y')))
 
-png('plot1.png', width=480, height=480)
+png('plot2.png', width=480, height=480)
 with(data,
-     hist(Global_active_power,
-          col=2,
-          main='Global Active Power',
-          xlab='Global Active Power (kilowatts)'))
+     plot.ts(Global_active_power,
+             main='',
+             xlab='',
+             ylab='Global Active Power (kilowatts)'))
 dev.off()
